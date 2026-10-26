@@ -23,25 +23,25 @@ input[type=text]{width:100%;border:1px solid var(--line);border-radius:10px;back
 #youtubeStartFrame{top:0;right:0;width:17%;height:17%}
 label{display:block;font-size:13px;color:var(--muted);margin:12px 0 6px}input[type=range]{width:100%;accent-color:var(--orange)}select{background:#11100f;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:8px;width:100%}
 .video-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.status{font-size:12px;color:var(--gold);min-height:18px;margin-top:8px}
-.thumbstrip{display:flex;gap:8px;overflow-x:auto;padding:5px 1px 12px}.thumb{flex:0 0 126px;background:#201e1b;padding:5px;border-radius:9px;border:1px solid transparent;text-align:left}.thumb.active{border-color:var(--orange)}.thumb img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:5px}.thumb span{display:block;font-size:11px;color:#d7cbc0;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.thumbstrip{display:flex;gap:8px;overflow-x:auto;padding:5px 1px 12px}.thumb{flex:0 0 300px;width:300px;min-width:300px;max-width:300px;background:#201e1b;padding:5px;border-radius:9px;border:1px solid transparent;text-align:left}.thumb.active{border-color:var(--orange)}.thumb img{display:block;width:100%;height:163px;aspect-ratio:16/9;object-fit:cover;border-radius:5px}.thumb span{display:block;font-size:11px;color:#d7cbc0;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .hint{color:var(--muted);font-size:12px;margin-top:8px}.pill{border:1px solid var(--line);border-radius:999px;padding:4px 8px;font-size:12px;color:var(--muted)}
 body.presenting header{display:none}
 body.presenting main{position:fixed;inset:0;z-index:1000;display:block;width:100vw;height:100vh;height:100dvh;max-width:none;margin:0;padding:0;overflow:hidden;background:#000}
 body.presenting .viewer{position:relative;display:flex;flex-direction:column;width:100%;height:100%;min-width:0}
-body.presenting .stage{flex:1;min-height:0;width:100%;height:calc(100vh - 64px);height:calc(100dvh - 64px);aspect-ratio:auto;border:0;border-radius:0;display:flex;padding:0}
-body.presenting #slideCanvas{width:min(100%,calc((100dvh - 64px)*1.7777778));max-height:calc(100dvh - 64px);aspect-ratio:16/9;flex:none}
+body.presenting .stage{flex:1;min-height:0;width:100%;height:100vh;height:100dvh;aspect-ratio:auto;border:0;border-radius:0;display:flex;padding:0}
+body.presenting #slideCanvas{width:min(100vw,calc(100dvh*1.7777778));max-height:100dvh;aspect-ratio:16/9;flex:none}
 body.presenting .side,body.presenting .thumbstrip,body.presenting .hint{display:none!important}
-body.presenting .controls{flex:none;height:64px;min-height:64px;width:100%;margin:0;padding:8px;justify-content:center;gap:8px;background:#11100f;z-index:10}
-body.presenting .controls .control-group:first-child{display:flex;justify-content:center;width:100%}
+body.presenting .controls{position:absolute;inset:auto 0 18px;display:flex;align-items:center;justify-content:space-between;width:100%;margin:0;padding:0 18px;background:transparent;z-index:10;pointer-events:none}
+body.presenting .controls .control-group:first-child{display:flex;justify-content:space-between;width:100%;pointer-events:none}
 body.presenting .controls .control-group:nth-child(2){display:none}
-body.presenting .controls button{padding:10px 24px;font-size:16px}
+body.presenting .controls button{width:42px;height:42px;min-width:0;padding:0;border-radius:50%;font-size:22px;line-height:1;background:#111b;color:#fff;border:1px solid #ffffff55;box-shadow:0 2px 10px #0008;pointer-events:auto}
 body.presenting .counter{display:none}
 @media(max-width:900px){main{grid-template-columns:1fr;padding:10px}.side{order:2}.stage{aspect-ratio:16/9}.top-actions button{padding:8px;font-size:12px}header{padding:10px}.brand{font-size:13px}}
 </style></head><body>
 <header><div class="brand">✦ <span>Rosario</span> · Presentador de Misterios Gloriosos</div><div class="top-actions"><button id="presentBtn" class="primary">⛶ Presentar</button></div></header>
 <main><section class="viewer">
 <div class="stage" id="stage"><div id="slideCanvas"><img id="slideImg" alt="Diapositiva actual"><iframe class="slide-video" id="youtubeStartFrame" title="Canción de inicio en YouTube" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe><iframe class="slide-video" id="youtubeFrame" title="Evangelio en YouTube" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div><div class="counter" id="counter">1 / 20</div></div>
-<div class="controls"><div class="control-group"><button id="prevBtn">← Anterior</button><button id="nextBtn" class="primary">Siguiente →</button></div><div class="control-group"><span class="pill" id="slideTitle">Bienvenidos</span><button id="fullBtn" class="hide-present">⛶ Pantalla completa</button></div></div>
+<div class="controls"><div class="control-group"><button id="prevBtn" aria-label="Diapositiva anterior" title="Anterior">←</button><button id="nextBtn" class="primary" aria-label="Diapositiva siguiente" title="Siguiente">→</button></div><div class="control-group"><span class="pill" id="slideTitle">Bienvenidos</span><button id="fullBtn" class="hide-present">⛶ Pantalla completa</button></div></div>
 <div class="thumbstrip" id="thumbstrip"></div>
 <div class="hint">Teclas: ← → para cambiar de diapositiva · Espacio para avanzar · F para presentar · Esc para salir.</div>
 </section>
@@ -87,7 +87,7 @@ function showYoutube(){
    else {youtubeStartFrame.style.display='none';youtubeStartFrame.src='';}
  }
 }
-function render(){img.src=slides[index];img.alt=titles[index];counter.textContent=(index+1)+' / '+slides.length;title.textContent=(index===7?'Evangelio':titles[index]);document.getElementById('prevBtn').disabled=index===0;document.getElementById('nextBtn').disabled=index===slides.length-1;[...strip.children].forEach((el,i)=>el.classList.toggle('active',i===index));status.textContent='';showYoutube()}
+function render(){img.src=slides[index];img.alt=titles[index];counter.textContent=(index+1)+' / '+slides.length;title.textContent=(index===7?'Evangelio':titles[index]);document.getElementById('prevBtn').disabled=index===0;document.getElementById('nextBtn').disabled=index===slides.length-1;[...strip.children].forEach((el,i)=>el.classList.toggle('active',i===index));if(!document.body.classList.contains('presenting')){const activeThumb=strip.children[index];if(activeThumb)requestAnimationFrame(()=>{const stripRect=strip.getBoundingClientRect(),thumbRect=activeThumb.getBoundingClientRect();strip.scrollTo({left:Math.max(0,strip.scrollLeft+thumbRect.left-stripRect.left-(strip.clientWidth-thumbRect.width)/2),behavior:'smooth'})})}status.textContent='';showYoutube()}
 function go(n){index=Math.max(0,Math.min(slides.length-1,n));render()}
 slides.forEach((src,i)=>{let b=document.createElement('button');b.className='thumb';b.innerHTML='<img src="'+src+'" alt=""><span>'+(i+1)+'. '+(i===7?'Evangelio':titles[i])+'</span>';b.onclick=()=>go(i);strip.appendChild(b)});
 document.getElementById('prevBtn').onclick=()=>go(index-1);document.getElementById('nextBtn').onclick=()=>go(index+1);
